@@ -16,4 +16,6 @@ dependencies {
     implementation 'mysql:mysql-connector-java:8.0.33'
     implementation 'org.apache.poi:poi:5.4.0'
     implementation 'org.apache.poi:poi-ooxml:5.4.0'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.28.1'
+    implementation 'org.json:json:20250107'
 }
