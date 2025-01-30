@@ -98,7 +98,7 @@ public class QuotesToScrap {
 
     public static void writeDataToExcel(List<DataDTO> dataList, String fileName) {
         Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Books Data");
+        Sheet sheet = workbook.createSheet("Quotes Data");
 
         String[] headers = {"quote", "author", "internal_link", "tags"};
         Row headerRow = sheet.createRow(0);

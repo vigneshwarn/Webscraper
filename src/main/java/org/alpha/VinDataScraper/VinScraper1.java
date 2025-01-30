@@ -1,6 +1,5 @@
 package org.alpha.VinDataScraper;
 
-import org.alpha.quotestoscrape.DataDTO;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -13,23 +12,23 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class VinScraper1 {
 
     public static void main(String[] args) throws InterruptedException {
-        fetchDataAndWriteData("https://www.carmax.com", false, true, true);
+        fetchDataAndWriteData("", false, false, true);
     }
 
     private static void fetchDataAndWriteData(String baseUrl, boolean headLessMode, boolean writeDataToDB, boolean writeDataToXLfile) throws InterruptedException {
@@ -75,22 +74,31 @@ public class VinScraper1 {
                 listVinData.put(vin, VinDTO.builder().vin(vin).model(model).year(year).make(make).build());
             }
             System.out.println("Retrieved " + skip + " of " + totalCount);
-            if (writeDataToDB) {
-                System.out.println("Storing " + skip + " vins into database...");
-                try {
-                    storeData(listVinData);
-                } catch (SQLException e) {
-                    System.out.println("SQLException: " + e.getMessage());
-                }
-                System.out.println(skip + " Data stored in database");
-                System.out.println("=========================================================");
-            }
-
-           /* if (writeDataToXLfile) {
-
-            }*/
+            writeData(writeDataToDB, writeDataToXLfile, skip, listVinData);
         }
         driver.quit();
+    }
+
+    private static void writeData(boolean writeDataToDB, boolean writeDataToXLfile, long skip, HashMap<String, VinDTO> listVinData) {
+        if (writeDataToDB) {
+            System.out.println("Storing " + skip + " vins into database...");
+            try {
+                storeData(listVinData);
+            } catch (SQLException e) {
+                System.out.println("SQLException: " + e.getMessage());
+            }
+            System.out.println(skip + " Data stored in database");
+            System.out.println("=========================================================");
+        }
+
+        if (writeDataToXLfile) {
+            System.out.println("Storing " + skip + " vins into XL file...");
+            try {
+                writeDataToExcel(listVinData, "vin_data.xlsx");
+            } catch (Exception e) {
+                System.out.println("Error Occurred while  writing data to xl: " + e.getMessage());
+            }
+        }
     }
 
     private static Connection initDBConnections() throws SQLException {
@@ -119,24 +127,27 @@ public class VinScraper1 {
         return false;
     }
 
-    public static void writeDataToExcel(List<DataDTO> dataList, String fileName) {
+    public static void writeDataToExcel(HashMap<String, VinDTO> data, String fileName) {
         Workbook workbook = new XSSFWorkbook();
-        Sheet sheet = workbook.createSheet("Books Data");
+        Sheet sheet = workbook.createSheet("Vin Data");
 
-        String[] headers = {"quote", "author", "internal_link", "tags"};
+        String[] headers = {"vin", "year", "make", "model"};
         Row headerRow = sheet.createRow(0);
         for (int i = 0; i < headers.length; i++) {
             Cell cell = headerRow.createCell(i);
             cell.setCellValue(headers[i]);
         }
 
-        int rowNum = 1;
-        for (DataDTO data : dataList) {
-            Row row = sheet.createRow(rowNum++);
-            row.createCell(0).setCellValue(data.getQuote());
-            row.createCell(1).setCellValue(data.getAuthor());
-            row.createCell(2).setCellValue(data.getInternalAuthorDetailLink());
-            row.createCell(3).setCellValue(data.getTags().toString());
+        File tmpDir = new File(fileName);
+
+        for (Map.Entry<String, VinDTO> entry : data.entrySet()) {
+            VinDTO value = entry.getValue();
+
+            Row row = sheet.createRow(sheet.getLastRowNum()+1);
+            row.createCell(0).setCellValue(value.getVin());
+            row.createCell(1).setCellValue(value.getVin());
+            row.createCell(2).setCellValue(value.getMake());
+            row.createCell(3).setCellValue(value.getModel());
         }
 
         try (FileOutputStream fileOut = new FileOutputStream(fileName)) {
@@ -144,6 +155,7 @@ public class VinScraper1 {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
         try {
             workbook.close();
         } catch (IOException e) {
