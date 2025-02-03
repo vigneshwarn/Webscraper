@@ -26,7 +26,7 @@ Webscraper is a Java-based project designed to scrape data from various websites
 
 
 ## capability
-- Able to scrape the data 10000 data per second
+- Able to scrape 10000 data per second
 - For the realworld VIN parser took 1Lakh data in 10 mins and stored in database
 - Encryption / Decryption of sensitive data
 
