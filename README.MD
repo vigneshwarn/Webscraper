@@ -1,5 +1,5 @@
-# Sample website for Web Scrapers
-## This is a sample website for Web scarping
+# Sample project for Web Scrapers
+## This is a sample project  for Web scarping
 ### [Extracts data's from website ]
 
 Tech Stack
