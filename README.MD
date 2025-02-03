@@ -39,7 +39,9 @@ Webscraper is a Java-based project designed to scrape data from various websites
 
 # Sample screenshot
 
-![Data stored image](https://drive.google.com/uc?id=16mhdsmqv-yqTxe2zFgHdJbN3I6FEMx4Z)
+![Data stored image](https://github.com/vigneshwarn/Webscraper/assets/main/Datastrored.jpg?raw=true)
+
+![Vin info in DB](https://github.com/vigneshwarn/Webscraper/assets/main/VinStoredInfo.jpg?raw=true)
 
 #This project is only for education purpose
 
