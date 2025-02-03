@@ -1,5 +1,6 @@
 package org.alpha.VinDataScraper;
 
+import org.alpha.Utils.Crypt;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -67,7 +68,7 @@ public class VinScraper1 {
             String make = "";
             String model = "";
             for (int j = 0; j < items.length(); j++) {
-                vin = items.getJSONObject(j).getString("vin");
+                Crypt.encrypt(items.getJSONObject(j).getString("vin"),baseUrl);
                 year = items.getJSONObject(j).getInt("year");
                 make = items.getJSONObject(j).getString("make");
                 model = items.getJSONObject(j).getString("model");
