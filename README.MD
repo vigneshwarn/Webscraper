@@ -15,8 +15,7 @@ Tech Stack
 Webscraper is a Java-based project designed to scrape data from various websites. It includes functionalities
 1. [books.toscrape.com](https://books.toscrape.com)
 2. [quotes.toscrape.com](https://quotes.toscrape.com)
-3. [Not to expose this site hence its pulls the real world VIN number] VIN data from car-related websites
-4. [Not to expose this site hence its pulls the real world VIN number] VIN data from car-related websites
+3. [Selenium & API Automation] VIN data from car-related websites 
 
 ## Features
 - Site Scrape book data including title, price, rating, stock status, and image URL
